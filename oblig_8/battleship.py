@@ -36,13 +36,11 @@ class Board:
        #check if ship already exists
         if direction == direction.HORIZONTAL:
             for i in range(size):
-                print(self.ship_matrix[coordinate[1], coordinate[0] + i])
                 if self.ship_matrix[coordinate[1], coordinate[0] + i] is not None:
                     return False
 
         if direction == direction.VERTICAL:
             for i in range(size):
-                print(self.ship_matrix[coordinate[1], coordinate[0] + i])
                 if self.ship_matrix[coordinate[1] + i, coordinate[0]] is not None:
                     return False
         return True
@@ -69,12 +67,14 @@ class Board:
         ship = self.ship_matrix[coordinate[1], coordinate[0]]
         if ship is not None:
             ship.hit()
+        self.shots_fired +=1
+        return True
 
 
     def draw_board(self):
 
         board = []
-
+        print("\t" + "\t".join(str(x) for x in range(10)))
         for y in range(10):
             for x in range(10):
                 value = self.is_hit_matrix[y, x]
@@ -91,15 +91,10 @@ class Board:
                         board.append("O")
 
         for x in range(10):
-            print("\t".join(element for element in board[x*10:x*10 + 10]))
-
-
-        #print(board[90:])
-
-        #for row in self.is_hit_matrix:
-        #    print("\t".join(str(location) for location in row))
-
-
+            print(f"{x}:\t" + "\t".join(element for element in board[x*10:x*10 + 10]))
 
     def has_won(self):
-        pass
+        for ship in self.ship:
+            if not ship.is_sunk():
+                return False
+        return True
